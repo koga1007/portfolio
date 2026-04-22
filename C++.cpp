@@ -2,61 +2,69 @@
 #include <string>
 #include <windows.h> 
 
-class Produto {
+class Produto
+{
 private:
     std::string nome;
     double PrecoUnitario;
     int quantidade;
 
 public:
-    Produto() : nome("vazio"), PrecoUnitario(0.0), quantidade(0) {}
+    Produto() : nome("vazio"), PrecoUnitario(0.0), quantidade(0) {};
 
-    void SetDados(int indice) {
-        std::cout << "Digite o nome do Produto " << (indice + 1) << ": ";
-        std::cin.ignore();
-        std::getline(std::cin, nome);
+    void SetDados(int i)
+    {
+        std::cout << "Digite o nome do Produto " << (i + 1) << ": ";
+        std::cin >> nome;
 
-        std::cout << "Digite o Preco do Produto " << (indice + 1) << ": ";
+        std::cout << "Digite o Preco do Produto " << (i + 1) << ": ";
         std::cin >> PrecoUnitario;
 
-        std::cout << "Digite a Quantidade do Produto " << (indice + 1) << ": ";
+        std::cout << "Digite a Quantidade do Produto " << (i + 1) << ": ";
         std::cin >> quantidade;
-        std::cout << "\n";
+
+        std::cout << "\n\n\n";
     }
 
-    double calcularTotal() {
-        return quantidade * PrecoUnitario;
+    double calcularTotal()
+    {
+        double total{ 0 };
+        total = quantidade * PrecoUnitario;
+        return total;
     }
 
-    void Exibir() {
+    void Exibir(double total)
+    {
         std::cout << "Nome: " << nome << "\n";
-        std::cout << "Preco Unidade: R$ " << PrecoUnitario << "\n";
-        std::cout << "Subtotal: R$ " << calcularTotal() << "\n";
-        std::cout << "---------------------------\n";
+        std::cout << "precoUnidade: " << PrecoUnitario << "\n";
+        std::cout << "ValorTotal: " << total << "\n\n\n";
     }
 };
 
-int main() {
+int main() 
+{
     SetConsoleOutputCP(CP_UTF8);
 
+    double ValorTotalLote{ 0 };
     int Qnt;
-    double ValorTotalLote = 0;
 
     std::cout << "Quantos produtos diferentes chegaram ao estoque: ";
-    if (!(std::cin >> Qnt)) return 1;
+    std::cin >> Qnt;
 
-    std::cout << "\n";
+    std::cout << "\n\n\n";
 
     Produto* ptrLote = new Produto[Qnt];
 
-    for (int i = 0; i < Qnt; i++) {
-        ptrLote[i].SetDados(i);
-        ValorTotalLote += ptrLote[i].calcularTotal();
+    for (int i = 0; i < Qnt; i++)
+    {
+        (ptrLote + i)->SetDados(i);
+        ValorTotalLote += (ptrLote + i)->calcularTotal();
     }
 
-    std::cout << "--- RESUMO DO ESTOQUE ---\n";
-    for (int i = 0; i < Qnt; i++) {
-        ptrLote[i].Exibir();
+    for (int i = 0; i < Qnt; i++)
+    {
+        double totalDoProduto = (ptrLote + i)->calcularTotal();
+        (ptrLote + i)->Exibir(totalDoProduto);
     }
 
     std::cout << "VALOR TOTAL DO LOTE: R$ " << ValorTotalLote << "\n";
